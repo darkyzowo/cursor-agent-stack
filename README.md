@@ -1,57 +1,79 @@
-# Cursor Agent Stack
+<p align="center">
+  <img src="docs/assets/logo.png" alt="Cursor Agent Stack" width="96" height="96" style="border-radius: 50%;" />
+</p>
 
-**Session memory, context budget, and engineering defaults for Cursor IDE + CLI.**
+<h1 align="center">Cursor Agent Stack</h1>
 
-Mechanical hooks + slim rules — not a 12-phase workflow. Survive `/summarize` without amnesia. Ask "what broke yesterday?" without re-explaining folder paths.
+<p align="center">
+  <strong>Session memory, context budget, and engineering defaults for Cursor IDE + CLI.</strong><br/>
+  Mechanical hooks + slim rules — survive <code>/summarize</code> without amnesia.
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
+  <a href="https://cursor.com"><img src="https://img.shields.io/badge/Cursor-Agent%20Hooks-000000?style=flat&logo=cursor&logoColor=white" alt="Cursor" /></a>
+  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-%3E%3D18-green.svg" alt="Node 18+" /></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/darkyzowo">@darkyzowo</a>
+</p>
+
+![Cursor Agent Stack banner — session memory that survives /summarize](docs/assets/banner-cursor-agent-stack.png)
 
 ---
 
-## The problem
+## Why this exists
 
-| Pain | What happens |
-|------|----------------|
-| Context hits 50%+ | Output quality drops |
-| `/summarize` (Cursor's compact) | Same session, but agent forgets files, goals, failed attempts |
-| New chat next day | Start from zero unless you handoff-paste |
+Cursor’s `/summarize` compresses the chat — but the agent still **forgets** files, goals, and failed attempts. You end up re-explaining paths or handoff-pasting.
 
-## The fix
+**Cursor Agent Stack** adds mechanical session memory:
 
-```mermaid
-flowchart LR
-  subgraph edits [Every edit]
-    W[Write / StrReplace] --> CP[checkpoint.md]
-  end
-  subgraph compact [On /summarize]
-    CP --> PC[preCompact hook]
-    PC --> ARCH[archive/checkpoint-T.md]
-    PC --> INJ[Inject checkpoint into context]
-  end
-  subgraph resume [New chat / same workspace]
-    SS[sessionStart hook] --> BRIEF[Memory brief + archive index]
-    BRIEF --> CP
-  end
-  subgraph forensics [Past session question]
-    Q[yesterday / last compact] --> ARCH
-    ARCH --> GIT[git diff cited files]
-  end
-```
+| Pain | Fix |
+|------|-----|
+| Context hits **50%+** → quality drops | Context budget rules + CLI HUD warns `↻ compact` |
+| `/summarize` → same session amnesia | `preCompact` hook archives state + re-injects checkpoint |
+| “What broke yesterday?” → path coaching | Agent already knows `.cursor/session/archive/` |
 
-**Three layers:**
+![Four-step session memory workflow](docs/assets/workflow-session-memory.png)
 
-1. **Rolling checkpoint** — goal, files touched, git delta (updated on every edit)
-2. **Compact archives** — snapshot on each `/summarize` (newest 10, max 7 days)
-3. **Always-on rules** — agent already knows paths; no "go read this folder" reminders
+---
+
+## What you get
+
+| Layer | What | Where |
+|-------|------|--------|
+| **Hooks** | Checkpoint update, compact archive, rehydrate, secret-guard | `~/.cursor/hooks/` |
+| **Rules** | Session memory, context budget, engineering defaults | `~/.cursor/rules/` |
+| **Skills** | Caveman (terse output), RTK (compressed CLI*) | `~/.cursor/skills/` |
+| **CLI HUD** | Context bar, model, git, compact warning | `statusline.js` |
+
+\*RTK skill documents wrappers — [install RTK](https://github.com) separately if you use it.
+
+### CLI HUD
+
+![CLI status line — context bar, compact warning, git branch](docs/assets/hud-statusline-preview.png)
+
+Live strip in Cursor CLI — context % turns yellow at **50%+** with `↻ compact`.
+
+### Checkpoint + archives
+
+![checkpoint.md and timestamped compact archives](docs/assets/checkpoint-archive-preview.png)
+
+- **`checkpoint.md`** — rolling live state (goal, files, git delta)
+- **`archive/checkpoint-*.md`** — one snapshot per `/summarize` (newest **10**, max **7 days**)
+- Agent reads archives for “yesterday / last compact” — **no folder reminders**
 
 ---
 
 ## Quick install
 
-**Requirements:** [Cursor](https://cursor.com) with Agent hooks, **Node.js 18+**, `cursor.agent.enableThirdPartyConfigs: true` in Cursor settings.
+**Requirements:** [Cursor](https://cursor.com) Agent hooks · **Node.js 18+** · `cursor.agent.enableThirdPartyConfigs: true`
 
-### Windows (PowerShell)
+### Windows
 
 ```powershell
-git clone https://github.com/YOUR_USER/cursor-agent-stack.git
+git clone https://github.com/darkyzowo/cursor-agent-stack.git
 cd cursor-agent-stack
 .\install.ps1
 ```
@@ -59,84 +81,74 @@ cd cursor-agent-stack
 ### macOS / Linux
 
 ```bash
-git clone https://github.com/YOUR_USER/cursor-agent-stack.git
+git clone https://github.com/darkyzowo/cursor-agent-stack.git
 cd cursor-agent-stack
 chmod +x install.sh && ./install.sh
 ```
 
-Then **reload Cursor** (Developer → Reload Window).
+**Then:** Cursor Settings → enable **third-party agent configs** → **Reload Window**.
 
-### Enable project hooks in IDE
-
-Cursor Settings → search **third party** → enable **`cursor.agent.enableThirdPartyConfigs`**.
-
----
-
-## What you get
-
-| Component | Purpose |
-|-----------|---------|
-| **Hooks** (`~/.cursor/hooks/`) | Checkpoint update, preCompact archive, sessionStart rehydration, secret-guard |
-| **Rules** (`~/.cursor/rules/`) | Session memory, context budget, engineering defaults, no-secret reads |
-| **Skills** | `caveman` (terse output), `rtk` (compressed CLI — needs RTK binary) |
-| **CLI HUD** (`statusline.js`) | Context bar, model, git branch, compact warning at 50%+ |
-| **Project template** | `.cursor/session/.gitignore` for repos |
-
-### CLI HUD (preview)
-
-```
-[CAV:ULTRA] | Composer ████████░░░░ 48%  ↻ compact | content-audit git:(main*) 
-```
-
----
-
-## Session files (per workspace)
-
-| Workspace | Path |
-|-----------|------|
-| Project repo | `<repo>/.cursor/session/` |
-| Home folder | `~/.cursor/session/` |
-
-| File | Role |
-|------|------|
-| `checkpoint.md` | Live state — continue current work |
-| `archive/checkpoint-*.md` | One snapshot per `/summarize` |
-| `hook-audit.log` | Debug: did hooks fire? |
-
-**Add to each repo** (optional, one-time):
+Optional per repo:
 
 ```powershell
-Copy-Item project-template\.cursor\session\.gitignore YOUR_REPO\.cursor\session\ -Force
+mkdir .cursor\session -Force
+Copy-Item project-template\.cursor\session\.gitignore .cursor\session\
 ```
 
 ---
 
-## Behavior cheat sheet
+## Behavior
 
 | Event | What happens |
 |-------|----------------|
-| Every edit | Rolling `checkpoint.md` updated |
-| `/summarize` or `/compact` | Refresh checkpoint + copy to `archive/` |
-| New Agent chat | Inject memory brief + latest checkpoint |
-| "Yesterday's session broke X" | Agent reads `archive/` — no path coaching |
+| **Every edit** | Rolling `checkpoint.md` updated |
+| **`/summarize` / `/compact`** | Refresh checkpoint + copy to `archive/` |
+| **New Agent chat** | Inject memory brief + latest checkpoint |
+| **Past session question** | Agent reads `archive/` + git — automatically |
+
+```mermaid
+flowchart LR
+  E[Edit] --> CP[checkpoint.md]
+  CP --> S[/summarize/]
+  S --> A[archive/]
+  S --> R[Re-inject context]
+  N[New chat] --> R
+  Q[yesterday?] --> A
+  A --> G[git diff]
+```
+
+---
+
+## Session paths
+
+| Workspace | Folder |
+|-----------|--------|
+| Project repo | `<repo>/.cursor/session/` |
+| Home directory | `~/.cursor/session/` |
+
+| File | Role |
+|------|------|
+| `checkpoint.md` | Continue **now** |
+| `archive/checkpoint-*.md` | Trace-back / forensics |
+| `hook-audit.log` | Verify hooks fired |
 
 ---
 
 ## Customize
 
-Edit `~/.cursor/rules/global-engineering.mdc` — add your project names, stacks, deploy targets.
+Edit `~/.cursor/rules/global-engineering.mdc` — add your projects, stacks, deploy targets.
 
-Turn off caveman: say **"normal mode"** in chat.
+Say **"normal mode"** to disable caveman terse output.
 
 ---
 
 ## Not included (by design)
 
 - Full Machina / phase-gate harness
-- Pass ceilings or TDD enforcement loops
+- Pass ceilings or mandatory TDD loops
 - Headroom MCP
-- "End session" LLM snapshot skill (planned optional add-on)
-- Domain skills (security-audit, playwright) — keep project-local
+- “End session” LLM snapshot (may add later)
+- Domain skills (security, playwright) — keep **project-local**
 
 ---
 
@@ -144,25 +156,23 @@ Turn off caveman: say **"normal mode"** in chat.
 
 | Symptom | Fix |
 |---------|-----|
-| Hooks never run | Enable `enableThirdPartyConfigs`, reload window |
+| Hooks never run | Enable `enableThirdPartyConfigs`, reload |
 | No archive after summarize | Check `hook-audit.log` for `preCompact` |
-| Agent asks "which folder?" | Reload — `session-memory` rule should be active |
-| Secret guard blocked a write | Use env vars, not literals in code |
+| Agent asks “which folder?” | Reload — `session-memory` rule should be active |
+| Secret guard blocked a write | Use env vars, not literals |
+
+Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ---
 
-## Architecture
+## Author
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
-
----
+<p align="center">
+  <img src="docs/assets/logo.png" alt="@darkyzowo" width="64" height="64" style="border-radius: 50%;" /><br/>
+  <a href="https://github.com/darkyzowo"><strong>@darkyzowo</strong></a><br/>
+  Built from a daily-driver Cursor setup — battle-tested on real repos.
+</p>
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
-
----
-
-## Credits
-
-Built from real daily-driver Cursor setup — session checkpointing, compact archives, token efficiency, secret guard. PRs welcome.
+MIT — see [LICENSE](LICENSE). PRs welcome.
