@@ -1,0 +1,6 @@
+# Install backups
+*.bak-*
+
+# OS
+.DS_Store
+Thumbs.db

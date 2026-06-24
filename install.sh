@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# install.sh — install Cursor Agent Stack to ~/.cursor/
+
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+CURSOR_HOME="${CURSOR_HOME:-$HOME/.cursor}"
+
+echo "Cursor Agent Stack installer"
+echo "Target: $CURSOR_HOME"
+
+mkdir -p "$CURSOR_HOME"/{rules,hooks,skills,session}
+
+if [[ -f "$CURSOR_HOME/hooks.json" ]]; then
+  ts="$(date +%Y%m%d-%H%M%S)"
+  cp "$CURSOR_HOME/hooks.json" "$CURSOR_HOME/hooks.json.bak-$ts"
+  echo "Backed up hooks.json -> hooks.json.bak-$ts"
+fi
+
+cp -R "$REPO_ROOT/cursor/rules/"* "$CURSOR_HOME/rules/"
+cp -R "$REPO_ROOT/cursor/hooks/"* "$CURSOR_HOME/hooks/"
+cp -R "$REPO_ROOT/cursor/skills/"* "$CURSOR_HOME/skills/"
+cp "$REPO_ROOT/cursor/hooks.json" "$CURSOR_HOME/hooks.json"
+cp "$REPO_ROOT/cursor/statusline.js" "$CURSOR_HOME/statusline.js"
+cp "$REPO_ROOT/cursor/session/.gitignore" "$CURSOR_HOME/session/.gitignore"
+
+SLASH_HOME="${CURSOR_HOME//\\//}"
+
+echo ""
+echo "Installed rules, hooks, skills, statusline.js"
+echo ""
+echo "Next steps:"
+echo "  1. Enable cursor.agent.enableThirdPartyConfigs = true in Cursor Settings"
+echo "  2. Reload Cursor"
+echo "  3. Optional CLI HUD — add statusLine to $CURSOR_HOME/cli-config.json:"
+echo '     "statusLine": { "type": "command", "command": "node '"$SLASH_HOME"'/statusline.js", ... }'
+echo "  4. Per repo: copy project-template/.cursor/session/.gitignore"

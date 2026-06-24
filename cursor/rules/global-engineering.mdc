@@ -1,0 +1,44 @@
+---
+description: Global engineering defaults — workflow, security invariants, token efficiency
+alwaysApply: true
+---
+
+# Global engineering defaults
+
+## Communication
+
+Apply the **caveman** skill at **ultra** intensity on every response unless the user says "stop caveman" or "normal mode". Code blocks, commits, and PR bodies stay normal.
+
+## Projects (customize)
+
+Add your repos here — stack, deploy target, naming quirks. Example:
+
+```markdown
+- **MyApp**: Next.js + Supabase. Deploy: Vercel.
+- **MyApi**: Python/FastAPI. Deploy: Railway.
+```
+
+## Workflow
+
+- Plan first for non-trivial tasks (3+ steps).
+- Verify before marking done — run tests, check logs.
+- Verify then commit — lint + build/test before committing.
+- Prefer Read, Glob, Grep over broad exploration for known paths.
+
+## Token efficiency (global stack)
+
+| Layer | What | Where |
+|-------|------|--------|
+| **Output** | Caveman ultra — short replies | `caveman` skill |
+| **Terminal** | `rtk <cmd>` on noisy CLI | `rtk` skill (requires [RTK](https://github.com) installed) |
+| **Edits** | Read once before Write; Grep callers before signature changes | This rule |
+| **Context** | Budget mode at 50%+; compact + checkpoint + archives | `session-memory` rule + hooks |
+| **Safety** | Secret write block | `secret-guard` hook |
+
+## Security invariants
+
+- Scope every DB query to the session user.
+- Return 404 (not 403) for unauthorised resource access.
+- Rate limit auth + public endpoints before going live.
+- Secrets in env vars — never in source code.
+- Never read secret-bearing files — see `no-secret-file-reads` rule.

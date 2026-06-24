@@ -1,0 +1,59 @@
+# Architecture
+
+## Design principles
+
+1. **Global = pleasant default** — no pass ceilings, no phase gates on every chat
+2. **Mechanical > prose** — hooks write files; rules tell agent how to use them
+3. **One checkpoint per workspace root** — home and each repo are isolated
+4. **Archives on compact only** — not every edit (avoids disk noise)
+
+## Hook pipeline
+
+```
+sessionStart
+  └─ session-rehydrate.js
+       └─ buildSessionStartContext()
+            ├─ buildSessionMemoryBrief()  ← paths, playbook, recent archive index
+            └─ readForInjection(checkpoint.md)
+
+sessionStart (matcher: compact)
+  └─ post-compact-rehydrate.js  ← same as above after /summarize
+
+preCompact  (/summarize)
+  └─ pre-compact-flush.js
+       └─ finalizeCompact()
+            ├─ write checkpoint.md
+            ├─ archiveCheckpoint() → archive/checkpoint-<ts>.md
+            └─ pruneArchives() → max 10, max 7 days
+
+postToolUse (Write|StrReplace)
+  └─ session-checkpoint-update.js
+       └─ updateFromToolUse() → merge files + goal scrape
+
+preToolUse (Write|StrReplace)
+  └─ secret-guard.js → block secret patterns in write content
+```
+
+## Workspace root resolution
+
+`checkpoint-lib.js` uses `workspace_roots[0]` from the hook payload, then walks up for `.git` or `.cursor` to find the session directory.
+
+## Rules vs hooks
+
+| Mechanism | When loaded | Purpose |
+|-----------|-------------|---------|
+| Rules (`.mdc`) | Every Agent turn | Ambient knowledge — paths, behavior, forensics playbook |
+| Hooks | Events | Write files, inject context on sessionStart/preCompact |
+
+Rules alone fail under context pressure; hooks alone don't teach forensics phrasing. Both together.
+
+## Cursor native `/summarize` vs this stack
+
+Cursor replaces chat history with a **large narrative summary** + transcript pointer. This stack adds **structured** checkpoint + **archived snapshots** the agent can grep without you re-explaining paths.
+
+## Extension points
+
+- **Goal extraction** — `pickGoalMessage()` in `checkpoint-lib.js`; tune transcript parsing
+- **Archive retention** — `MAX_ARCHIVES`, `MAX_ARCHIVE_AGE_DAYS` constants
+- **End session skill** — optional future: user-triggered handoff file
+- **Project skills** — copy domain skills into `<repo>/.cursor/skills/` only when needed

@@ -1,0 +1,55 @@
+---
+description: Session memory — checkpoint, compact archives, past-session forensics (always know the paths)
+alwaysApply: true
+---
+
+# Session memory
+
+Hooks + disk files track session state per **workspace root**. You already know this — do **not** ask the user for folder paths when they refer to a past session, yesterday's work, last compact, or "what we changed before summarize."
+
+## Behavior
+
+| Event | What happens |
+|-------|----------------|
+| **Every edit** | Rolling `.cursor/session/checkpoint.md` updated |
+| **`/summarize` or `/compact`** | `preCompact` refreshes checkpoint + copies to `.cursor/session/archive/checkpoint-<timestamp>.md` |
+| **New chat / sessionStart** | Latest checkpoint injected; **archives never auto-injected** |
+
+## Where files live
+
+| Workspace | Session folder |
+|-----------|----------------|
+| **User home** (workspace = home directory) | `~/.cursor/session/` |
+| **Project repo** | `<repo>/.cursor/session/` |
+
+Within that folder:
+
+- **Live state:** `checkpoint.md` — continue current work
+- **Compact history:** `archive/checkpoint-*.md` — newest **10**, max **7 days**
+- **Hook log:** `hook-audit.log` — verify `preCompact` / `sessionStart`
+
+All session files are gitignored in repos; home copies are local only.
+
+## When user asks about past work
+
+Triggers: "yesterday's session", "last compact", "what UX change broke X", "before we summarized", "trace back", "what were we doing Tuesday."
+
+**Do this automatically:**
+
+1. Resolve workspace root (current project or home).
+2. **Glob** `.cursor/session/archive/` or read the index from `sessionStart` injection if present.
+3. Pick archive(s) by **date in filename**, **mtime**, or **grep goal/files** — read **one at a time**.
+4. Cross-check **git** for files mentioned in the archive.
+5. Answer from evidence — no "which folder?" / "can you point me to the file?"
+
+**Do not:** load every archive into context; paste full checkpoint blobs; ask user to run `/summarize` for history.
+
+## Continue vs investigate
+
+| User intent | Source |
+|-------------|--------|
+| Continue current task | `checkpoint.md` (injected on sessionStart) |
+| Investigate older session / regression after compact | `archive/checkpoint-*.md` |
+| Exact conversation wording | Grep Cursor transcript JSONL (last resort) |
+
+`sessionStart` hook injects a live index of recent compacts + current checkpoint. Trust it; refresh with Glob if stale.
