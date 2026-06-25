@@ -34,6 +34,11 @@ Add your repos here — stack, deploy target, naming quirks. Example:
 | **Edits** | Read once before Write; Grep callers before signature changes | This rule |
 | **Context** | Budget mode at 50%+; compact + checkpoint + archives | `session-memory` rule + hooks |
 | **Safety** | Secret write block | `secret-guard` hook |
+| **Frontend** | Impeccable when project has it | `frontend-design-pointer` rule + project install |
+
+## Frontend (project-local)
+
+Web app repos opt in via `project-template/install-frontend.ps1` — **Impeccable** + ui-ux-pro-max + design-refs. Not global. See cursor-agent-stack `docs/FRONTEND.md`.
 
 ## Security invariants
 

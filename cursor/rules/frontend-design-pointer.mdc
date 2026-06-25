@@ -1,0 +1,17 @@
+---
+description: When a repo has Impeccable installed, use it for frontend UI work
+alwaysApply: true
+---
+
+# Frontend design (project-local)
+
+When the open workspace contains **`.cursor/skills/impeccable/`**:
+
+1. Read **`PRODUCT.md`** and **`DESIGN.md`** at the project root before UI edits (run **`/impeccable init`** if missing).
+2. Prefer **`/impeccable`** commands for design, critique, audit, polish, typeset — not generic "make it prettier" prose.
+3. Follow **`.cursor/rules/frontend-design-lane.mdc`** when present.
+4. Use **`.cursor/design-refs/README.md`** for inspiration — one reference lane per task.
+
+If Impeccable is not installed, this rule is inert. Install: [docs/FRONTEND.md](https://github.com/darkyzowo/cursor-agent-stack/blob/master/docs/FRONTEND.md) in cursor-agent-stack.
+
+Do not duplicate checkpoint hooks in project `.cursor/hooks.json` — session memory hooks live in global `~/.cursor/hooks.json`.

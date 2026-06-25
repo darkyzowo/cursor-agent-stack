@@ -44,7 +44,7 @@ Cursor’s `/summarize` compresses the chat — but the agent still **forgets** 
 | Layer | What | Where |
 |-------|------|--------|
 | **Hooks** | Checkpoint update, compact archive, rehydrate, secret-guard | `~/.cursor/hooks/` |
-| **Rules** | Session memory, context budget, engineering defaults | `~/.cursor/rules/` |
+| **Rules** | Session memory, context budget, engineering defaults, frontend pointer | `~/.cursor/rules/` |
 | **Skills** | Caveman (terse output), RTK (compressed CLI*) | `~/.cursor/skills/` |
 | **CLI HUD** | Context bar, model, git, compact warning | `statusline.js` |
 
@@ -91,9 +91,15 @@ chmod +x install.sh && ./install.sh
 Optional per repo:
 
 ```powershell
+# Session gitignore only
 mkdir .cursor\session -Force
 Copy-Item project-template\.cursor\session\.gitignore .cursor\session\
+
+# Web app frontend stack (Impeccable + ui-ux-pro-max + design refs)
+& .\project-template\install-frontend.ps1   # run from YOUR repo root, pass full path to script
 ```
+
+See [docs/FRONTEND.md](docs/FRONTEND.md) for the full frontend module.
 
 ---
 
@@ -134,7 +140,28 @@ flowchart LR
 
 ---
 
-## Customize
+## Frontend module (optional, per repo)
+
+For **web app** projects — not loaded globally.
+
+| Tool | Role |
+|------|------|
+| **[Impeccable](https://github.com/pbakaus/impeccable)** | Design director: `/impeccable init`, critique, typeset, polish, 44 detector rules |
+| **ui-ux-pro-max** | Palette/stack/UX CSV lookup |
+| **design-refs/** | Curated awesome-design-md links (3–5 brands) |
+
+```powershell
+# From your app repo root
+& "C:\path\to\cursor-agent-stack\project-template\install-frontend.ps1"
+```
+
+Then **`/impeccable init`** → `PRODUCT.md` + `DESIGN.md`.
+
+Piloted on a Next.js internal dashboard — hook blocked AI-slop gradients on first test.
+
+Details: [docs/FRONTEND.md](docs/FRONTEND.md)
+
+---
 
 Edit `~/.cursor/rules/global-engineering.mdc` — add your projects, stacks, deploy targets.
 
@@ -148,7 +175,8 @@ Say **"normal mode"** to disable caveman terse output.
 - Pass ceilings or mandatory TDD loops
 - Headroom MCP
 - “End session” LLM snapshot (may add later)
-- Domain skills (security, playwright) — keep **project-local**
+- **Impeccable / ui-ux-pro-max in global** — install per web app repo via `project-template/install-frontend.ps1`
+- Vendored Impeccable skill files — fetched by `npx impeccable install` at project setup
 
 ---
 

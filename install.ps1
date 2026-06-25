@@ -47,3 +47,4 @@ Write-Host "  3. Optional CLI HUD — merge into $cliConfig :"
 Write-Host $statusLineBlock -ForegroundColor DarkGray
 Write-Host ""
 Write-Host "  4. Per repo: copy project-template\.cursor\session\.gitignore to .cursor\session\"
+Write-Host "  5. Web apps: run project-template\install-frontend.ps1 from repo root — see docs/FRONTEND.md"

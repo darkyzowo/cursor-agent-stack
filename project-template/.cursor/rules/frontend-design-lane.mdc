@@ -1,0 +1,50 @@
+---
+description: UI/UX work — Impeccable commands, design context, and reference library
+globs:
+  - app/**/*.tsx
+  - app/**/*.css
+  - src/**/*.tsx
+  - src/**/*.css
+  - components/**/*.tsx
+  - pages/**/*.tsx
+alwaysApply: false
+---
+
+# Frontend design lane
+
+This repo uses the **Cursor Agent Stack frontend module**: Impeccable (direction + enforcement) + ui-ux-pro-max (lookup) + curated design references.
+
+Apply when editing UI, CSS, or layout — not for API/backend-only changes.
+
+## Before UI work
+
+1. Read root **`PRODUCT.md`** (strategic) and **`DESIGN.md`** (visual tokens) when present.
+2. If missing, run **`/impeccable init`** once — do not invent design context from scratch.
+3. For `/impeccable` commands, follow `.cursor/skills/impeccable/SKILL.md` (run `context.mjs` once per session).
+4. For inspiration, see **`.cursor/design-refs/README.md`** — pick **one** reference lane per task.
+
+## Command shortcuts
+
+| Intent | Command |
+|--------|---------|
+| First-time setup | `/impeccable init` |
+| UX review | `/impeccable critique <surface>` |
+| A11y / quality | `/impeccable audit <path>` |
+| Typography pass | `/impeccable typeset` |
+| Pre-ship cleanup | `/impeccable polish <target>` |
+| Browser variants | `/impeccable live` (dev server + CSP setup) |
+
+## Hooks (automatic)
+
+- **Project**: Impeccable design detector on UI edits (`.cursor/hooks.json`).
+- **Global**: secret-guard + session checkpoint from `~/.cursor/hooks.json` — stacks cleanly; do not duplicate checkpoint hooks in the repo.
+
+## Stack pairing
+
+| Tool | Role |
+|------|------|
+| **Impeccable** | Creative direction, 23 commands, 44 detector rules |
+| **ui-ux-pro-max** | Palette/stack/UX lookup (Python CSV search) |
+| **design-refs/** | Curated awesome-design-md links (not vendored YAML dumps) |
+
+Preserve committed brand tokens in `DESIGN.md` unless `/impeccable typeset`, `/impeccable colorize`, or the user explicitly requests a redesign.
