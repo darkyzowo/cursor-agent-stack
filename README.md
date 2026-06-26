@@ -13,6 +13,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
   <a href="https://cursor.com"><img src="https://img.shields.io/badge/Cursor-Agent%20Hooks-000000?style=flat&logo=cursor&logoColor=white" alt="Cursor" /></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-%3E%3D18-green.svg" alt="Node 18+" /></a>
+  <a href="https://github.com/darkyzowo/cursor-agent-stack/releases/tag/v0.3.0"><img src="https://img.shields.io/badge/release-v0.3.0-blue.svg" alt="v0.3.0" /></a>
 </p>
 
 <p align="center">
@@ -44,7 +45,7 @@ Cursor’s `/summarize` compresses the chat — but the agent still **forgets** 
 | Layer | What | Where |
 |-------|------|--------|
 | **Hooks** | Checkpoint update, compact archive, rehydrate, secret-guard | `~/.cursor/hooks/` |
-| **Rules** | Session memory, context budget, engineering defaults, frontend pointer | `~/.cursor/rules/` |
+| **Rules** | Session memory, context budget, engineering defaults, frontend + 3D pointers | `~/.cursor/rules/` |
 | **Skills** | Caveman (terse output), RTK (compressed CLI*) | `~/.cursor/skills/` |
 | **CLI HUD** | Context bar, model, git, compact warning | `statusline.js` |
 
@@ -95,8 +96,11 @@ Optional per repo:
 mkdir .cursor\session -Force
 Copy-Item project-template\.cursor\session\.gitignore .cursor\session\
 
-# Web app frontend stack (Impeccable + ui-ux-pro-max + design refs)
-& .\project-template\install-frontend.ps1   # run from YOUR repo root, pass full path to script
+# 2D web app (Impeccable + ui-ux-pro-max)
+& .\project-template\install-frontend.ps1   # from YOUR repo root
+
+# 3D / R3F (proof scene gate + stack CSV)
+& .\project-template\install-3d.ps1
 ```
 
 See [docs/FRONTEND.md](docs/FRONTEND.md) for the full frontend module.
@@ -161,7 +165,38 @@ Piloted on a Next.js internal dashboard — hook blocked AI-slop gradients on fi
 
 Details: [docs/FRONTEND.md](docs/FRONTEND.md)
 
+## 3D module (optional, per repo)
+
+For **WebGL / React Three Fiber** — separate from the 2D frontend stack.
+
+| Tool | Role |
+|------|------|
+| **r3f-three** | Proof scene gate, stack picker, SSR/sizing/lights checklist |
+| **ui-ux-pro-max** | `react-three-fiber` stack CSV (20 implementation rules) |
+| **design-refs/3d.md** | pmndrs / drei / model-viewer links |
+| **scenes/ProofScene.tsx** | Milestone 1 baseline (box + lights + orbit) |
+
+```powershell
+# From your R3F repo root
+& "C:\path\to\cursor-agent-stack\project-template\install-3d.ps1"
+```
+
+**Hybrid** (dashboard + 3D hero): run both `install-frontend.ps1` and `install-3d.ps1`.
+
+Why v0.3: v0.2 covered 2D SaaS UI only — 3D failed without implementation lane (see diagnosis in [docs/3D.md](docs/3D.md)).
+
+Details: [docs/3D.md](docs/3D.md)
+
 ---
+
+## Releases
+
+| Version | Highlights |
+|---------|------------|
+| **v0.3.0** | 3D / R3F module — r3f-three skill, react-three-fiber stack CSV, install-3d, ProofScene |
+| **v0.2.0** | Frontend module — Impeccable + ui-ux-pro-max + design-refs |
+| **v0.1.0** | Session memory hooks + rules + caveman + RTK |
+
 
 Edit `~/.cursor/rules/global-engineering.mdc` — add your projects, stacks, deploy targets.
 
@@ -175,7 +210,7 @@ Say **"normal mode"** to disable caveman terse output.
 - Pass ceilings or mandatory TDD loops
 - Headroom MCP
 - “End session” LLM snapshot (may add later)
-- **Impeccable / ui-ux-pro-max in global** — install per web app repo via `project-template/install-frontend.ps1`
+- **Impeccable / ui-ux-pro-max / r3f-three in global** — install per repo via `install-frontend.ps1` (2D) or `install-3d.ps1` (WebGL)
 - Vendored Impeccable skill files — fetched by `npx impeccable install` at project setup
 
 ---

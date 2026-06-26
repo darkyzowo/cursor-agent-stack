@@ -80,3 +80,19 @@ Project root
 ```
 
 Hook stacking: Cursor runs global + project hooks. Checkpoint hooks must not be duplicated in project `hooks.json`.
+
+### 3D module (project-local)
+
+See [3D.md](3D.md). Same hook-stacking rules as frontend — no checkpoint hooks in project `hooks.json`.
+
+```
+Project <repo>/.cursor/
+  skills/r3f-three/
+  rules/3d-interactive-lane.mdc
+  design-refs/3d.md
+
+Project root
+  scenes/ProofScene.tsx   (optional template from install-3d)
+```
+
+Global `3d-interactive-pointer.mdc` tells the agent to use r3f-three when installed.

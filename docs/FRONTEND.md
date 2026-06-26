@@ -98,3 +98,22 @@ Battle-tested on **content-audit** (Next.js + Tailwind + Radix): Impeccable hook
 - PRODUCT.md / DESIGN.md (per-project)
 
 Global `frontend-design-pointer.mdc` only tells the agent to *use* Impeccable when the project has it installed.
+
+## 3D module (optional, separate)
+
+For **WebGL / R3F** work — not loaded by `install-frontend.ps1`.
+
+| Tool | Role |
+|------|------|
+| **r3f-three** | Proof scene gate, stack picker, SSR/sizing checklist |
+| **ui-ux-pro-max** | `react-three-fiber` stack CSV |
+| **design-refs/3d.md** | pmndrs / drei links |
+| **scenes/ProofScene.tsx** | Milestone 1 baseline |
+
+```powershell
+& "...\project-template\install-3d.ps1"
+```
+
+Hybrid apps (dashboard + 3D): run **both** `install-frontend.ps1` and `install-3d.ps1`.
+
+Full docs: [3D.md](3D.md)

@@ -448,6 +448,11 @@ python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack react-tailwin
 **Mobile (React Native / Expo):**
 ```bash
 python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack react-native
+``` 
+
+**3D / WebGL (React Three Fiber):**
+```bash
+python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack react-three-fiber
 ```
 
 ---
@@ -476,6 +481,7 @@ python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack react-native
 |-------|-------|---------|
 | `react-tailwind` | Tailwind utilities, shadcn/ui, Recharts, Vite, Zustand, RHF | Web dashboards, SaaS apps |
 | `react-native` | Components, Navigation, Lists, Gestures | iOS/Android mobile apps |
+| `react-three-fiber` | Canvas, lights, GLTF, SSR, performance | R3F scenes, WebGL heroes |
 
 ---
 

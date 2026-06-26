@@ -1,0 +1,19 @@
+---
+description: When a repo has r3f-three installed, use the 3D implementation lane
+alwaysApply: true
+---
+
+# 3D interactive (project-local)
+
+When the open workspace contains **`.cursor/skills/r3f-three/`**:
+
+1. Read **`.cursor/skills/r3f-three/SKILL.md`** before WebGL / R3F work — proof scene gate first.
+2. Follow **`.cursor/rules/3d-interactive-lane.mdc`** when present.
+3. Stack lookup: `python .cursor/skills/ui-ux-pro-max/scripts/search.py "<topic>" --stack react-three-fiber`
+4. Inspiration: **`.cursor/design-refs/3d.md`**
+
+If r3f-three is not installed, this rule is inert. Install: [docs/3D.md](https://github.com/darkyzowo/cursor-agent-stack/blob/master/docs/3D.md).
+
+For 2D dashboards, use [docs/FRONTEND.md](https://github.com/darkyzowo/cursor-agent-stack/blob/master/docs/FRONTEND.md) (Impeccable) instead.
+
+Do not duplicate checkpoint hooks in project `.cursor/hooks.json` — session memory hooks live in global `~/.cursor/hooks.json`.

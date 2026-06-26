@@ -75,8 +75,8 @@ CSV_CONFIG = {
 STACK_CONFIG = {
     "react-native": {"file": "stacks/react-native.csv"},
     "react-tailwind": {"file": "stacks/react-tailwind.csv"},
+    "react-three-fiber": {"file": "stacks/react-three-fiber.csv"},
 }
-
 # Common columns for all stacks
 _STACK_COLS = {
     "search_cols": ["Category", "Guideline", "Description", "Do", "Don't"],

@@ -2,7 +2,7 @@
 
 Copy or run installers from here into **individual repos**. Nothing in this folder is loaded globally.
 
-## Web app (frontend module)
+## Web app (2D frontend module)
 
 ```powershell
 # From your Next/React/Vue repo root
@@ -17,26 +17,36 @@ Then: **`/impeccable init`** → customize **`design-refs/README.md`**.
 
 Full docs: [docs/FRONTEND.md](../docs/FRONTEND.md)
 
+## 3D / WebGL (R3F module)
+
+```powershell
+& "C:\path\to\cursor-agent-stack\project-template\install-3d.ps1"
+```
+
+```bash
+chmod +x ./install-3d.sh && ./install-3d.sh
+```
+
+Then: install `three` + `@react-three/fiber` + `@react-three/drei`, render **ProofScene** first.
+
+Full docs: [docs/3D.md](../docs/3D.md)
+
+Hybrid UI + 3D: run **both** installers.
+
 ## Domain skills only
 
 ```powershell
 & ".\install-project-skills.ps1"   # run from this folder, target = current directory
 ```
 
-Or copy into a repo:
-
 | Skill | Use when |
 |-------|----------|
 | `security-audit` | Auth, APIs, admin, user data |
 | `playwright` | E2E browser tests |
 | `ui-ux-pro-max` | Palette/stack/UX lookup |
+| `r3f-three` | WebGL / R3F scenes (also installed by install-3d) |
 
 ## Session folder
-
-```powershell
-mkdir .cursor\session -Force
-Copy-Item project-template\.cursor\session\.gitignore .cursor\session\
-```
 
 Checkpoint **hooks** are global (`~/.cursor/hooks.json`). Session **files** are per-repo.
 
@@ -44,17 +54,14 @@ Checkpoint **hooks** are global (`~/.cursor/hooks.json`). Session **files** are 
 
 ```
 project-template/
-├── install-frontend.ps1 / .sh      # Full stack
+├── install-frontend.ps1 / .sh      # 2D stack (Impeccable)
+├── install-3d.ps1 / .sh            # 3D stack (R3F)
 ├── install-project-skills.ps1 / .sh
+├── scenes/ProofScene.tsx
 ├── .cursor/
 │   ├── rules/frontend-design-lane.mdc
-│   ├── design-refs/README.md
-│   ├── hooks.impeccable.json       # Reference only — impeccable install writes hooks.json
-│   ├── session/.gitignore
-│   └── skills/                     # security-audit, playwright, ui-ux-pro-max
-└── .impeccable/
-    ├── config.json
-    └── live/config.next-app-router.json
+│   ├── rules/3d-interactive-lane.mdc
+│   ├── design-refs/README.md, 3d.md
+│   └── skills/                     # r3f-three, ui-ux-pro-max, ...
+└── .impeccable/                    # frontend module only
 ```
-
-Impeccable itself is installed via **`npx impeccable install`** (not vendored in cursor-agent-stack).

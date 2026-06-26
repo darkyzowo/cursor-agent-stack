@@ -1,0 +1,46 @@
+---
+description: 3D / WebGL work — R3F skill, proof scene gate, stack lookup
+globs:
+  - scenes/**/*.tsx
+  - scenes/**/*.ts
+  - "**/*Scene*.tsx"
+  - "**/*scene*.tsx"
+  - app/**/*3d*.tsx
+  - src/**/*3d*.tsx
+alwaysApply: false
+---
+
+# 3D interactive lane
+
+This repo uses the **Cursor Agent Stack 3D module**: r3f-three (implementation + proof gate) + ui-ux-pro-max `react-three-fiber` stack + `design-refs/3d.md`.
+
+Apply when editing WebGL / R3F scenes — not for API-only or pure 2D Tailwind work.
+
+## Before 3D work
+
+1. Read `.cursor/skills/r3f-three/SKILL.md` — stack picker + proof scene gate.
+2. Run stack lookup when unsure:  
+   `python .cursor/skills/ui-ux-pro-max/scripts/search.py "<topic>" --stack react-three-fiber`
+3. Inspiration: `.cursor/design-refs/3d.md` — one reference lane per task.
+
+## Mandatory order
+
+1. **Proof** — box/sphere + lights + `OrbitControls` (see `scenes/ProofScene.tsx`)
+2. **Stage** — grid, ground, `Environment`
+3. **Content** — GLTF, placement
+4. **Polish** — postprocessing only after smooth proof
+
+Never skip proof to build an "environment".
+
+## Impeccable boundary
+
+- **Do not** use `/impeccable polish` or CSS-centric detectors as the primary loop for WebGL files.
+- Hybrid repos: Impeccable for 2D UI; this lane for `Canvas` / scenes.
+- Optional: add camera/light/material tokens to root `DESIGN.md` for 3D palette consistency.
+
+## Verify
+
+- DevTools: no WebGL/R3F errors
+- Canvas has non-zero layout size
+- Orbit works; mesh visible
+- `prefers-reduced-motion` respected for auto animation
