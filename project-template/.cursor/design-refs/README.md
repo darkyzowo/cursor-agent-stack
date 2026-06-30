@@ -22,3 +22,7 @@ Swap rows for your product lane (e.g. marketing site → add **vercel**, **frame
 4. **Lookup tables** → `ui-ux-pro-max` skill for palette/stack CSV search when exploring alternatives.
 
 Do not mash all references into one screen.
+
+## 3D / WebGL
+
+For R3F scenes use **3d.md** in this folder (installed by install-3d.ps1), not dashboard refs above.

@@ -117,3 +117,5 @@ For **WebGL / R3F** work — not loaded by `install-frontend.ps1`.
 Hybrid apps (dashboard + 3D): run **both** `install-frontend.ps1` and `install-3d.ps1`.
 
 Full docs: [3D.md](3D.md)
+
+Hybrid routing: [HYBRID.md](HYBRID.md)

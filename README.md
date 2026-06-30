@@ -13,7 +13,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
   <a href="https://cursor.com"><img src="https://img.shields.io/badge/Cursor-Agent%20Hooks-000000?style=flat&logo=cursor&logoColor=white" alt="Cursor" /></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-%3E%3D18-green.svg" alt="Node 18+" /></a>
-  <a href="https://github.com/darkyzowo/cursor-agent-stack/releases/tag/v0.3.0"><img src="https://img.shields.io/badge/release-v0.3.0-blue.svg" alt="v0.3.0" /></a>
+  <a href="https://github.com/darkyzowo/cursor-agent-stack/releases/tag/v0.3.1"><img src="https://img.shields.io/badge/release-v0.3.1-blue.svg" alt="v0.3.1" /></a>
 </p>
 
 <p align="center">
@@ -193,6 +193,7 @@ Details: [docs/3D.md](docs/3D.md)
 
 | Version | Highlights |
 |---------|------------|
+| **v0.3.1** | Install bundle split, hybrid routing, verify CI, HYBRID.md |
 | **v0.3.0** | 3D / R3F module — r3f-three skill, react-three-fiber stack CSV, install-3d, ProofScene |
 | **v0.2.0** | Frontend module — Impeccable + ui-ux-pro-max + design-refs |
 | **v0.1.0** | Session memory hooks + rules + caveman + RTK |
@@ -239,3 +240,11 @@ Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 ## License
 
 MIT — see [LICENSE](LICENSE). PRs welcome.
+
+## Verify
+
+```powershell
+.\\scripts\\verify.ps1
+``` 
+
+CI runs the same checks on push/PR.

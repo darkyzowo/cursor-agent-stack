@@ -1,0 +1,32 @@
+# Changelog
+
+All notable releases of [cursor-agent-stack](https://github.com/darkyzowo/cursor-agent-stack).
+
+## [v0.3.1] — 2026-06-26
+
+### Fixed
+- **install bundle split**: `install-frontend` uses `-Bundle 2d` (no orphan `r3f-three` without 3D rule)
+- **install-3d** uses `-Bundle 3d` via shared `install-project-skills`
+- **global-engineering**: correct pointer refs (`frontend-design-pointer` + `3d-interactive-pointer`)
+- **Hybrid routing**: `docs/HYBRID.md`, pointer rules, installer next-steps
+
+### Added
+- `scripts/verify.ps1` / `verify.sh` — hook syntax + ui-ux stack smoke tests
+- GitHub Actions `verify.yml` on push/PR
+- Cross-link `design-refs/README.md` → `3d.md`
+
+### Changed
+- Enriched `r3f-three` skill (deps, Next/Vite, Playwright verify)
+- ui-ux-pro-max skill description stack count
+
+## [v0.3.0] — 2026-06-26
+
+- 3D / R3F module: r3f-three skill, react-three-fiber CSV, install-3d, ProofScene, docs/3D.md
+
+## [v0.2.0] — 2026-06-25
+
+- Frontend module: Impeccable + ui-ux-pro-max + design-refs
+
+## [v0.1.0] — initial
+
+- Session memory hooks, rules, caveman, RTK, statusline

@@ -48,3 +48,6 @@ Apply when editing UI, CSS, or layout — not for API/backend-only changes.
 | **design-refs/** | Curated awesome-design-md links (not vendored YAML dumps) |
 
 Preserve committed brand tokens in `DESIGN.md` unless `/impeccable typeset`, `/impeccable colorize`, or the user explicitly requests a redesign.
+## Hybrid (UI + WebGL)
+
+If `.cursor/skills/r3f-three/` exists, use **3d-interactive-lane.mdc** for `scenes/` and R3F files — not this rule. See docs/HYBRID.md in cursor-agent-stack.

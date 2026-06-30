@@ -9,66 +9,105 @@ description: >-
 
 # R3F / Three.js implementation lane
 
-**Not** a 2D UI skill. For dashboards and Tailwind, use Impeccable + ui-ux-pro-max react-tailwind. For 3D, follow this skill first.
+**Not** a 2D UI skill. Dashboards → Impeccable + `react-tailwind`. WebGL → this skill.
 
 ## When to apply
 
-- User asks for 3D scene, environment, WebGL hero, immersive canvas, GLTF/GLB viewer
-- Editing scenes/, *Scene*.tsx, or files importing @react-three/fiber
-- Debugging black canvas, SSR WebGL errors, zero-size canvas
+- 3D scene, environment, WebGL hero, GLTF/GLB viewer
+- `scenes/`, `*Scene*.tsx`, `@react-three/fiber` imports
+- Black canvas, SSR errors, zero-size canvas
 
-## When NOT to apply
+## Stack picker
 
-- Pure CSS 3D transforms / parallax (Tailwind only)
-- Static product spin -> prefer @google/model-viewer or Spline embed
-- Dashboard tables, forms, SaaS UI -> frontend module / Impeccable
+| Need | Use |
+|------|-----|
+| Interactive scene | R3F + `@react-three/drei` |
+| GLB spin only | `@google/model-viewer` or Spline embed |
+| CSS parallax | Tailwind transforms — no WebGL |
+| Game / heavy physics | Babylon.js (separate — not this skill) |
 
-## Stack picker (choose before writing code)
+## Dependencies (pin together)
 
-| Need | Use | Avoid |
-|------|-----|-------|
-| Interactive scene, custom logic | R3F + @react-three/drei | Raw Three.js in React without R3F |
-| Single GLB spin on marketing page | model-viewer or Spline iframe | Full R3F stack |
-| Fake depth on landing | CSS transform perspective | WebGL |
-| Physics-heavy game | Babylon.js (out of scope) | Hand-rolled physics day one |
+```bash
+npm i three @react-three/fiber @react-three/drei
+```
+
+Keep `three`, `@react-three/fiber`, `@react-three/drei` on **compatible majors** (check pmndrs release notes). Mismatch → runtime errors.
 
 ## Proof scene gate (mandatory)
 
-Never start with terrain, city, particles, or HDRI environment.
+Never start with terrain, HDRI city, or particles.
 
-Ship this first (copy from scenes/ProofScene.tsx if present):
+1. Sized wrapper (`h-[480px]` or `h-screen`)
+2. `Canvas` + camera `[3,3,3]` fov 50
+3. `ambientLight` + `directionalLight`
+4. Colored mesh
+5. `OrbitControls`
 
-1. Wrapper with explicit size (h-screen w-full or fixed aspect box)
-2. Canvas with camera position [3, 3, 3], fov 50
-3. ambientLight (~0.4) + directionalLight position [5, 5, 5]
-4. Visible mesh with distinct color
-5. OrbitControls from drei
+Copy `scenes/ProofScene.tsx` if present. **Orbit must work** before stage/content/polish.
 
-Only after proof renders and orbits -> stage -> assets -> polish.
+## Next.js (App Router)
 
-## Next.js / SSR
+```tsx
+'use client';
+import dynamic from 'next/dynamic';
 
-Use `'use client'`, `dynamic(() => import('./ProofScene'), { ssr: false })`, wrapper with non-zero height.
+const ProofScene = dynamic(() => import('@/scenes/ProofScene'), { ssr: false });
 
-## Black screen debug
+export function Hero3D() {
+  return (
+    <div className="h-[480px] w-full">
+      <ProofScene />
+    </div>
+  );
+}
+```
 
-| Cause | Fix |
-|-------|-----|
-| No lights | ambient + directional |
-| Camera inside mesh | move camera back |
-| Scale wrong | normalize model scale |
-| Canvas height 0 | explicit wrapper height |
-| SSR | dynamic import ssr false |
+## Vite + React
+
+- Put scene in `src/scenes/ProofScene.tsx`
+- Import directly — no SSR issue unless using SSR framework
+- Still require **non-zero height** on wrapper
+
+## Black screen checklist
+
+| Symptom | Fix |
+|---------|-----|
+| Black, no errors | Add lights; check wrapper height |
+| `window is not defined` | `dynamic(..., { ssr: false })` |
+| Tiny canvas | Parent `height: 0` — set explicit height |
+| Model invisible | Scale 0.001/1000; camera inside mesh |
+
+## Performance defaults
+
+```tsx
+<Canvas dpr={[1, 2]} gl={{ antialias: true, powerPreference: 'high-performance' }}>
+```
+
+- Defer shadows until 60fps baseline
+- Draco for large GLB
+- `prefers-reduced-motion`: disable auto-spin
+
+## Verify (before done)
+
+1. DevTools: zero WebGL/R3F errors
+2. Canvas has layout size > 0
+3. Orbit/zoom works
+4. Optional: Playwright skill — screenshot page, assert canvas visible
 
 ## Lookup
 
-`python .cursor/skills/ui-ux-pro-max/scripts/search.py "canvas ssr" --stack react-three-fiber`
+```bash
+python .cursor/skills/ui-ux-pro-max/scripts/search.py "canvas ssr" --stack react-three-fiber
+python .cursor/skills/ui-ux-pro-max/scripts/search.py "gltf draco" --stack react-three-fiber
+```
 
 Inspiration: `.cursor/design-refs/3d.md`
 
+## Hybrid repos
+
+Impeccable for 2D UI only. See [HYBRID.md](https://github.com/darkyzowo/cursor-agent-stack/blob/master/docs/HYBRID.md).
+
 ## Milestones
 
-1. Proof - box + lights + orbit
-2. Stage - Grid, ground, Environment
-3. Content - GLTF + Draco
-4. Polish - after 60fps proof
+1. Proof → 2. Stage (grid, Environment) → 3. GLTF → 4. Polish (after perf OK)

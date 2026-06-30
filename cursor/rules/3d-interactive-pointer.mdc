@@ -12,8 +12,14 @@ When the open workspace contains **`.cursor/skills/r3f-three/`**:
 3. Stack lookup: `python .cursor/skills/ui-ux-pro-max/scripts/search.py "<topic>" --stack react-three-fiber`
 4. Inspiration: **`.cursor/design-refs/3d.md`**
 
-If r3f-three is not installed, this rule is inert. Install: [docs/3D.md](https://github.com/darkyzowo/cursor-agent-stack/blob/master/docs/3D.md).
+## Hybrid repos (UI + WebGL)
 
-For 2D dashboards, use [docs/FRONTEND.md](https://github.com/darkyzowo/cursor-agent-stack/blob/master/docs/FRONTEND.md) (Impeccable) instead.
+If **Impeccable** is also installed:
+
+- **WebGL / scenes only** → this lane. Skip Impeccable CSS detectors on canvas code.
+- **Dashboard / forms / Tailwind** → `frontend-design-lane.mdc` + Impeccable.
+- Routing: [HYBRID.md](https://github.com/darkyzowo/cursor-agent-stack/blob/master/docs/HYBRID.md).
+
+If r3f-three is not installed, this rule is inert. Install: [docs/3D.md](https://github.com/darkyzowo/cursor-agent-stack/blob/master/docs/3D.md).
 
 Do not duplicate checkpoint hooks in project `.cursor/hooks.json` — session memory hooks live in global `~/.cursor/hooks.json`.

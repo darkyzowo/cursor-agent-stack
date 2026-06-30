@@ -13,7 +13,7 @@ Write-Host "Cursor Agent Stack — frontend module" -ForegroundColor Cyan
 Write-Host "Target: $ProjectRoot" -ForegroundColor DarkGray
 
 # 1. Domain skills (ui-ux-pro-max, playwright, security-audit)
-& (Join-Path $TemplateRoot 'install-project-skills.ps1')
+& (Join-Path $TemplateRoot 'install-project-skills.ps1') -Bundle 2d
 
 # 2. Project rule + design refs
 New-Item -ItemType Directory -Force -Path (Join-Path $CursorDir 'rules') | Out-Null
@@ -68,6 +68,7 @@ Write-Host "Next steps:" -ForegroundColor Cyan
 Write-Host "  1. Reload Cursor (enable third-party agent configs if not already)"
 Write-Host "  2. Run /impeccable init  — writes PRODUCT.md (+ optional DESIGN.md)"
 Write-Host "  3. Customize .cursor/design-refs/README.md for your product lane"
-Write-Host "  4. For /impeccable live: copy .impeccable/live/config.* template for your framework"
+Write-Host "  4. 3D hero too? Also run install-3d.ps1 — see docs/HYBRID.md"
+Write-Host "  5. For /impeccable live: copy .impeccable/live/config.* template for your framework"
 Write-Host ""
 Write-Host "Do NOT add checkpoint hooks to .cursor/hooks.json — they live in ~/.cursor/hooks.json" -ForegroundColor DarkGray

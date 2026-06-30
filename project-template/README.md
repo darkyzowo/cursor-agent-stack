@@ -33,6 +33,18 @@ Full docs: [docs/3D.md](../docs/3D.md)
 
 Hybrid UI + 3D: run **both** installers.
 
+
+## Skill bundles (`install-project-skills`)
+
+| Bundle | Skills | Used by |
+|--------|--------|---------|
+| `2d` | security-audit, playwright, ui-ux-pro-max | install-frontend |
+| `3d` | above + r3f-three | install-3d |
+| `all` | every skill in template | manual |
+
+```powershell
+& ".\install-project-skills.ps1" -Bundle 2d
+```
 ## Domain skills only
 
 ```powershell

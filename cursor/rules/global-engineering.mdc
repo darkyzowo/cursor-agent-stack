@@ -34,7 +34,7 @@ Add your repos here — stack, deploy target, naming quirks. Example:
 | **Edits** | Read once before Write; Grep callers before signature changes | This rule |
 | **Context** | Budget mode at 50%+; compact + checkpoint + archives | `session-memory` rule + hooks |
 | **Safety** | Secret write block | `secret-guard` hook |
-| **Frontend** | Impeccable (2D) or r3f-three (3D) when project has them | `frontend-design-pointer` rule + project install |
+| **Frontend** | Impeccable (2D) or r3f-three (3D) when project has them | `frontend-design-pointer` + `3d-interactive-pointer` rules + project install |
 
 ## Frontend (project-local)
 
