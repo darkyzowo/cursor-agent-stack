@@ -95,4 +95,12 @@ Project root
   scenes/ProofScene.tsx   (optional template from install-3d)
 ```
 
-Global `3d-interactive-pointer.mdc` tells the agent to use r3f-three when installed.
+Global pointers:
+- `frontend-design-pointer.mdc` → Impeccable when `.cursor/skills/impeccable/` exists
+- `3d-interactive-pointer.mdc` → r3f-three when `.cursor/skills/r3f-three/` exists
+
+Hybrid lane routing: [HYBRID.md](HYBRID.md).
+
+## Verify
+
+`scripts/verify.sh` (CI: `.github/workflows/verify.yml`) — hook syntax + ui-ux-pro-max stack smoke tests.

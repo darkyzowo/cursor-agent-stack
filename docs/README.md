@@ -1,0 +1,18 @@
+# Documentation
+
+| Doc | Purpose |
+|-----|---------|
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Hooks, rules, global vs project-local layout |
+| [FRONTEND.md](FRONTEND.md) | 2D web app module (Impeccable + ui-ux-pro-max) |
+| [3D.md](3D.md) | WebGL / R3F module (r3f-three + ProofScene gate) |
+| [HYBRID.md](HYBRID.md) | Dashboard + 3D hero — lane routing |
+| [../CHANGELOG.md](../CHANGELOG.md) | Release history |
+
+## Install scripts
+
+| Script | Scope |
+|--------|--------|
+| `../install.ps1` / `install.sh` | Global `~/.cursor/` — hooks, rules, skills |
+| `../project-template/install-frontend.ps1` | Per-repo 2D (`-Bundle 2d`) |
+| `../project-template/install-3d.ps1` | Per-repo 3D (`-Bundle 3d`) |
+| `../scripts/verify.ps1` | Repo smoke tests (also runs in CI) |

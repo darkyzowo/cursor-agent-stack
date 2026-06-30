@@ -1,3 +1,5 @@
+See also: [documentation index](README.md) · [HYBRID.md](HYBRID.md) for UI + WebGL apps.
+
 # Frontend module
 
 Optional **project-local** stack for web apps. Keeps global Cursor lean; rigor when a repo opts in.

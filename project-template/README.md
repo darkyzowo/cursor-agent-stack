@@ -45,6 +45,7 @@ Hybrid UI + 3D: run **both** installers.
 ```powershell
 & ".\install-project-skills.ps1" -Bundle 2d
 ```
+
 ## Domain skills only
 
 ```powershell

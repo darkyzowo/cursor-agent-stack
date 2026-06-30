@@ -36,3 +36,4 @@ echo "  3. Optional CLI HUD — add statusLine to $CURSOR_HOME/cli-config.json:"
 echo '     "statusLine": { "type": "command", "command": "node '"$SLASH_HOME"'/statusline.js", ... }'
 echo "  4. Per repo: copy project-template/.cursor/session/.gitignore"
 echo "  5. Per repo: install-frontend.sh (2D) or install-3d.sh (R3F) — docs/FRONTEND.md and docs/3D.md"
+echo "  5. After changes: ./scripts/verify.sh"

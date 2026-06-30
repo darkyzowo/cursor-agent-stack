@@ -5,7 +5,7 @@
 <h1 align="center">Cursor Agent Stack</h1>
 
 <p align="center">
-  <strong>Session memory, context budget, and engineering defaults for Cursor IDE + CLI.</strong><br/>
+  <strong>Session memory, context budget, and optional design modules for Cursor IDE + CLI.</strong><br/>
   Mechanical hooks + slim rules — survive <code>/summarize</code> without amnesia.
 </p>
 
@@ -13,7 +13,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
   <a href="https://cursor.com"><img src="https://img.shields.io/badge/Cursor-Agent%20Hooks-000000?style=flat&logo=cursor&logoColor=white" alt="Cursor" /></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-%3E%3D18-green.svg" alt="Node 18+" /></a>
-  <a href="https://github.com/darkyzowo/cursor-agent-stack/releases/tag/v0.3.1"><img src="https://img.shields.io/badge/release-v0.3.1-blue.svg" alt="v0.3.1" /></a>
+  <a href="https://github.com/darkyzowo/cursor-agent-stack/releases/tag/v0.4.0"><img src="https://img.shields.io/badge/release-v0.4.0-blue.svg" alt="v0.4.0" /></a>
 </p>
 
 <p align="center">
@@ -24,195 +24,133 @@
 
 ---
 
+## Stack at a glance
+
+| Layer | Install | What you get |
+|-------|---------|--------------|
+| **Global** | `install.ps1` | Session memory hooks, secret-guard, rules, caveman + RTK skills, CLI HUD |
+| **2D frontend** | `project-template/install-frontend.ps1` | Impeccable, ui-ux-pro-max, dashboard design-refs |
+| **3D / WebGL** | `project-template/install-3d.ps1` | r3f-three skill, react-three-fiber CSV, ProofScene gate |
+| **Hybrid** | Both installers | [HYBRID.md](docs/HYBRID.md) — lane routing for UI + R3F |
+
+Global stays lean. Project modules opt in per repo.
+
+---
+
 ## Why this exists
 
-Cursor’s `/summarize` compresses the chat — but the agent still **forgets** files, goals, and failed attempts. You end up re-explaining paths or handoff-pasting.
-
-**Cursor Agent Stack** adds mechanical session memory:
+Cursor's `/summarize` compresses the chat — but the agent still **forgets** files, goals, and failed attempts.
 
 | Pain | Fix |
 |------|-----|
-| Context hits **50%+** → quality drops | Context budget rules + CLI HUD warns `↻ compact` |
-| `/summarize` → same session amnesia | `preCompact` hook archives state + re-injects checkpoint |
-| “What broke yesterday?” → path coaching | Agent already knows `.cursor/session/archive/` |
+| Context **50%+** → quality drops | Context budget rules + CLI HUD `↻ compact` |
+| `/summarize` amnesia | `preCompact` archives + re-injects checkpoint |
+| "What broke yesterday?" | Agent reads `.cursor/session/archive/` |
+| 2D UI slop | Impeccable + design-refs (per repo) |
+| 3D black canvas / wrong lane | r3f-three proof gate + stack CSV (per repo) |
 
 ![Four-step session memory workflow](docs/assets/workflow-session-memory.png)
 
 ---
 
-## What you get
-
-| Layer | What | Where |
-|-------|------|--------|
-| **Hooks** | Checkpoint update, compact archive, rehydrate, secret-guard | `~/.cursor/hooks/` |
-| **Rules** | Session memory, context budget, engineering defaults, frontend + 3D pointers | `~/.cursor/rules/` |
-| **Skills** | Caveman (terse output), RTK (compressed CLI*) | `~/.cursor/skills/` |
-| **CLI HUD** | Context bar, model, git, compact warning | `statusline.js` |
-
-\*RTK skill documents wrappers — [install RTK](https://github.com) separately if you use it.
-
-### CLI HUD
-
-![CLI status line — context bar, compact warning, git branch](docs/assets/hud-statusline-preview.png)
-
-Live strip in Cursor CLI — context % turns yellow at **50%+** with `↻ compact`.
-
-### Checkpoint + archives
-
-![checkpoint.md and timestamped compact archives](docs/assets/checkpoint-archive-preview.png)
-
-- **`checkpoint.md`** — rolling live state (goal, files, git delta)
-- **`archive/checkpoint-*.md`** — one snapshot per `/summarize` (newest **10**, max **7 days**)
-- Agent reads archives for “yesterday / last compact” — **no folder reminders**
-
----
-
 ## Quick install
 
-**Requirements:** [Cursor](https://cursor.com) Agent hooks · **Node.js 18+** · `cursor.agent.enableThirdPartyConfigs: true`
+**Requirements:** [Cursor](https://cursor.com) hooks · **Node 18+** · Python 3.10+ (ui-ux lookup) · `enableThirdPartyConfigs: true`
 
-### Windows
+### Global
 
 ```powershell
 git clone https://github.com/darkyzowo/cursor-agent-stack.git
 cd cursor-agent-stack
 .\install.ps1
+.\scripts\verify.ps1
 ```
-
-### macOS / Linux
 
 ```bash
-git clone https://github.com/darkyzowo/cursor-agent-stack.git
-cd cursor-agent-stack
-chmod +x install.sh && ./install.sh
+chmod +x install.sh scripts/verify.sh && ./install.sh && ./scripts/verify.sh
 ```
 
-**Then:** Cursor Settings → enable **third-party agent configs** → **Reload Window**.
+Reload Cursor after enabling third-party agent configs.
 
-Optional per repo:
+### Per repo (from YOUR app root)
 
 ```powershell
-# Session gitignore only
-mkdir .cursor\session -Force
-Copy-Item project-template\.cursor\session\.gitignore .cursor\session\
-
-# 2D web app (Impeccable + ui-ux-pro-max)
-& .\project-template\install-frontend.ps1   # from YOUR repo root
-
-# 3D / R3F (proof scene gate + stack CSV)
-& .\project-template\install-3d.ps1
+& "C:\path\to\cursor-agent-stack\project-template\install-frontend.ps1"  # 2D
+& "C:\path\to\cursor-agent-stack\project-template\install-3d.ps1"        # 3D
 ```
 
-See [docs/FRONTEND.md](docs/FRONTEND.md) for the full frontend module.
+Docs index: [docs/README.md](docs/README.md)
 
 ---
 
-## Behavior
+## Modules
 
-| Event | What happens |
-|-------|----------------|
-| **Every edit** | Rolling `checkpoint.md` updated |
-| **`/summarize` / `/compact`** | Refresh checkpoint + copy to `archive/` |
-| **New Agent chat** | Inject memory brief + latest checkpoint |
-| **Past session question** | Agent reads `archive/` + git — automatically |
+**2D** — [FRONTEND.md](docs/FRONTEND.md): Impeccable, ui-ux-pro-max, design-refs. Pilot: Next.js dashboard.
 
-```mermaid
-flowchart LR
-  E[Edit] --> CP[checkpoint.md]
-  CP --> S[/summarize/]
-  S --> A[archive/]
-  S --> R[Re-inject context]
-  N[New chat] --> R
-  Q[yesterday?] --> A
-  A --> G[git diff]
-```
+**3D** — [3D.md](docs/3D.md): r3f-three, ProofScene gate, react-three-fiber CSV.
+
+**Hybrid** — [HYBRID.md](docs/HYBRID.md): both installers + lane routing.
 
 ---
 
-## Session paths
-
-| Workspace | Folder |
-|-----------|--------|
-| Project repo | `<repo>/.cursor/session/` |
-| Home directory | `~/.cursor/session/` |
-
-| File | Role |
-|------|------|
-| `checkpoint.md` | Continue **now** |
-| `archive/checkpoint-*.md` | Trace-back / forensics |
-| `hook-audit.log` | Verify hooks fired |
-
----
-
-## Frontend module (optional, per repo)
-
-For **web app** projects — not loaded globally.
-
-| Tool | Role |
-|------|------|
-| **[Impeccable](https://github.com/pbakaus/impeccable)** | Design director: `/impeccable init`, critique, typeset, polish, 44 detector rules |
-| **ui-ux-pro-max** | Palette/stack/UX CSV lookup |
-| **design-refs/** | Curated awesome-design-md links (3–5 brands) |
+## Verify
 
 ```powershell
-# From your app repo root
-& "C:\path\to\cursor-agent-stack\project-template\install-frontend.ps1"
+.\scripts\verify.ps1
 ```
 
-Then **`/impeccable init`** → `PRODUCT.md` + `DESIGN.md`.
-
-Piloted on a Next.js internal dashboard — hook blocked AI-slop gradients on first test.
-
-Details: [docs/FRONTEND.md](docs/FRONTEND.md)
-
-## 3D module (optional, per repo)
-
-For **WebGL / React Three Fiber** — separate from the 2D frontend stack.
-
-| Tool | Role |
-|------|------|
-| **r3f-three** | Proof scene gate, stack picker, SSR/sizing/lights checklist |
-| **ui-ux-pro-max** | `react-three-fiber` stack CSV (20 implementation rules) |
-| **design-refs/3d.md** | pmndrs / drei / model-viewer links |
-| **scenes/ProofScene.tsx** | Milestone 1 baseline (box + lights + orbit) |
-
-```powershell
-# From your R3F repo root
-& "C:\path\to\cursor-agent-stack\project-template\install-3d.ps1"
-```
-
-**Hybrid** (dashboard + 3D hero): run both `install-frontend.ps1` and `install-3d.ps1`.
-
-Why v0.3: v0.2 covered 2D SaaS UI only — 3D failed without implementation lane (see diagnosis in [docs/3D.md](docs/3D.md)).
-
-Details: [docs/3D.md](docs/3D.md)
+CI: `.github/workflows/verify.yml` on push/PR.
 
 ---
 
 ## Releases
 
+[CHANGELOG.md](CHANGELOG.md) · current **v0.4.0**
+
 | Version | Highlights |
 |---------|------------|
-| **v0.3.1** | Install bundle split, hybrid routing, verify CI, HYBRID.md |
-| **v0.3.0** | 3D / R3F module — r3f-three skill, react-three-fiber stack CSV, install-3d, ProofScene |
-| **v0.2.0** | Frontend module — Impeccable + ui-ux-pro-max + design-refs |
-| **v0.1.0** | Session memory hooks + rules + caveman + RTK |
-
-
-Edit `~/.cursor/rules/global-engineering.mdc` — add your projects, stacks, deploy targets.
-
-Say **"normal mode"** to disable caveman terse output.
+| **v0.4.0** | Full-stack docs, VERSION file, README consolidation |
+| **v0.3.1** | Bundle split, hybrid routing, verify CI |
+| **v0.3.0** | 3D / R3F module |
+| **v0.2.0** | Frontend / Impeccable module |
+| **v0.1.0** | Session memory core |
 
 ---
 
-## Not included (by design)
+## Not included
 
-- Full Machina / phase-gate harness
-- Pass ceilings or mandatory TDD loops
-- Headroom MCP
-- “End session” LLM snapshot (may add later)
-- **Impeccable / ui-ux-pro-max / r3f-three in global** — install per repo via `install-frontend.ps1` (2D) or `install-3d.ps1` (WebGL)
-- Vendored Impeccable skill files — fetched by `npx impeccable install` at project setup
+Machina harness, global Impeccable/r3f-three, vendored Impeccable (use `npx impeccable install`).
+
+Details: [ARCHITECTURE.md](docs/ARCHITECTURE.md)
+
+---
+
+## Author
+
+<p align="center">
+  <a href="https://github.com/darkyzowo"><strong>@darkyzowo</strong></a>
+</p>
+
+## License
+
+MIT — [LICENSE](LICENSE)
+
+---
+
+## Global components
+
+| Component | Role |
+|-----------|------|
+| Hooks | Checkpoint, compact, rehydrate, secret-guard |
+| Rules | Session memory, context budget, engineering defaults |
+| Pointers | `frontend-design-pointer`, `3d-interactive-pointer` |
+| Skills | caveman, RTK |
+| CLI HUD | `statusline.js` — context bar, compact warning |
+
+### Checkpoint + archives
+
+- `checkpoint.md` — rolling state (goal, files, git)
+- `archive/checkpoint-*.md` — per `/summarize` (max 10, 7 days)
 
 ---
 
@@ -220,31 +158,8 @@ Say **"normal mode"** to disable caveman terse output.
 
 | Symptom | Fix |
 |---------|-----|
-| Hooks never run | Enable `enableThirdPartyConfigs`, reload |
-| No archive after summarize | Check `hook-audit.log` for `preCompact` |
-| Agent asks “which folder?” | Reload — `session-memory` rule should be active |
-| Secret guard blocked a write | Use env vars, not literals |
-
-Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-
----
-
-## Author
-
-<p align="center">
-  <img src="docs/assets/logo.png" alt="@darkyzowo" width="64" height="64" style="border-radius: 50%;" /><br/>
-  <a href="https://github.com/darkyzowo"><strong>@darkyzowo</strong></a><br/>
-  Built from a daily-driver Cursor setup — battle-tested on real repos.
-</p>
-
-## License
-
-MIT — see [LICENSE](LICENSE). PRs welcome.
-
-## Verify
-
-```powershell
-.\\scripts\\verify.ps1
-``` 
-
-CI runs the same checks on push/PR.
+| Hooks never run | `enableThirdPartyConfigs` + reload |
+| No archive after summarize | `hook-audit.log` → `preCompact` |
+| 3D black canvas | ProofScene first — [3D.md](docs/3D.md) |
+| Wrong design lane | [HYBRID.md](docs/HYBRID.md) |
+| Secret guard blocked write | Env vars, not literals |

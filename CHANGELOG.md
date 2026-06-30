@@ -2,6 +2,20 @@
 
 All notable releases of [cursor-agent-stack](https://github.com/darkyzowo/cursor-agent-stack).
 
+## [v0.4.0] — 2026-06-30
+
+### Added
+- `VERSION` file and [docs/README.md](docs/README.md) documentation index
+- Consolidated root README — full stack overview (global, 2D, 3D, hybrid)
+
+### Changed
+- README structure: stack table, verify section, release history
+- Architecture and module docs aligned with v0.3.1 installers
+
+### Notes
+- 3D module complete through v0.3.x (proof gate, bundles, hybrid routing, CI)
+- Per-repo 3D validation is done at install time in your app — not vendored in this repo
+
 ## [v0.3.1] — 2026-06-26
 
 ### Fixed
